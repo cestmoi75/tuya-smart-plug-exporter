@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: Copyright (c) 2024-2026 Luiz Bizzio
-# SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
+# SPDX-License-Identifier: Apache-2.0
 
 from __future__ import annotations
 
@@ -25,8 +25,8 @@ from prometheus_client.platform_collector import PlatformCollector
 from prometheus_client.process_collector import ProcessCollector
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
-EXPORTER_VERSION = "1.1.1"
-
+EXPORTER_VERSION = "1.0.0"
+REPO_URL = "https://github.com/luizbizzio/tuya-smart-plug-exporter"
 
 @dataclass
 class DeviceConfig:
@@ -1041,7 +1041,7 @@ def make_app(registry: CollectorRegistry, telemetry_path: str, collector: TuyaCo
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--config.file", dest="config_file", default=None)
+    p.add_argument("--config-file", dest="config_file", default=None)
     p.add_argument("--web.listen-address", dest="web_listen_address", default=None)
     p.add_argument("--web.telemetry-path", dest="web_telemetry_path", default=None)
     p.add_argument("--log.level", dest="log_level", default=os.environ.get("LOG_LEVEL", "INFO"))
@@ -1064,7 +1064,7 @@ def main() -> int:
 
     if not cfg_path:
         raise SystemExit(
-            "missing config file: use --config.file=PATH, set TUYA_SMART_PLUG_EXPORTER_CONFIG=PATH, or place config.yaml in the current directory, script directory, or /config/config.yaml"
+            "missing config file: use --config-file=PATH, set TUYA_SMART_PLUG_EXPORTER_CONFIG=PATH, or place config.yaml in the current directory, script directory, or /config/config.yaml"
         )
 
     cfg = load_config_file(cfg_path)
@@ -1173,6 +1173,9 @@ def main() -> int:
         autodiscover_threshold,
         relay_threshold,
     )
+    
+    if os.environ.get("TUYA_EXPORTER_HIDE_STAR_HINT", "").strip().lower() not in ("1", "true", "yes", "on"):
+        logging.info("documentation and updates: %s | if this exporter helped you, consider starring the repo", REPO_URL)
 
     try:
         httpd.serve_forever()
