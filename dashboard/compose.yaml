@@ -1,0 +1,20 @@
+services:
+  tuya-power-dashboard:
+    build: .
+    image: tuya-power-dashboard:local
+    container_name: tuya-power-dashboard
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    environment:
+      # Override this for a separate Prometheus host.
+      PROMETHEUS_URL: "${PROMETHEUS_URL:-http://127.0.0.1:9090}"
+      PORT: "8088"
+      CACHE_TTL_SECONDS: "5"
+      MAX_HISTORY_HOURS: "168"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8088/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

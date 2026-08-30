@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tuya Power Dashboard</title><link rel="stylesheet" href="/static/style.css"></head>
+<body><main><header><div><p class="eyebrow">HOME ENERGY</p><h1>Tuya Power Dashboard</h1><p class="muted">Prometheus 기반 스마트 플러그 전력 모니터링</p></div><div class="controls"><label>장치 <select id="device"><option value="*">전체 장치</option></select></label><label>기간 <select id="hours"><option value="1">1시간</option><option value="6">6시간</option><option value="24" selected>24시간</option><option value="168">7일</option></select></label><button id="refresh">새로고침</button></div></header>
+<section class="cards"><article><span>현재 소비전력</span><strong id="current">—</strong><small id="updated">조회 중…</small></article><article><span>선택 장치</span><strong id="count">—</strong><small>Prometheus telemetry</small></article><article><span>상태</span><strong id="status">연결 중</strong><small id="error"></small></article></section>
+<section class="panel"><div class="panel-head"><h2>전력 추이</h2><span id="range"></span></div><div class="chart-wrap"><svg id="chart" viewBox="0 0 1000 320" preserveAspectRatio="none" role="img" aria-label="전력 추이 차트"></svg><div id="empty" class="empty">데이터가 없습니다. Exporter와 Prometheus 연결을 확인하세요.</div></div></section>
+<section class="panel"><div class="panel-head"><h2>장치별 현재 전력</h2></div><div id="devices" class="device-list"></div></section>
+</main><script src="/static/app.js"></script></body></html>
